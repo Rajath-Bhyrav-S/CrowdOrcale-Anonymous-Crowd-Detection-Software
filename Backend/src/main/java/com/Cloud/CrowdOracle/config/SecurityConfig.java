@@ -14,13 +14,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> {}) // Enable CORS with default configuration
             .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for API endpoints
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/**").permitAll() // Allow all requests to /api endpoints
-                .anyRequest().authenticated() // Require authentication for any other requests
-            )
-            .httpBasic(httpBasic -> {}); // Enable basic HTTP authentication if needed
+                .requestMatchers("/health/**").permitAll() // Allow health check endpoints
+                .requestMatchers("/**").permitAll() // Allow all requests for frontend
+                .anyRequest().permitAll() // Allow all other requests
+            );
 
         return http.build();
     }
 }
+
+

@@ -14,3 +14,5 @@ CREATE INDEX IF NOT EXISTS idx_crowd_data_temperature ON crowd_data (temperature
 
 -- Create index on total_people_count for range queries
 CREATE INDEX IF NOT EXISTS idx_crowd_data_people_count ON crowd_data (total_people_count);
+
+

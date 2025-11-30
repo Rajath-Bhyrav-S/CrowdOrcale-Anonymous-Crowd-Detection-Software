@@ -214,4 +214,98 @@ public class CrowdDataController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
+    /**
+     * GET endpoint to retrieve the latest crowd data entry
+     * Usage: GET /api/crowd-data/latest
+     */
+    @GetMapping("/latest")
+    public ResponseEntity<Map<String, Object>> getLatestCrowdData() {
+        try {
+            List<CrowdData> allData = crowdDataService.getAllCrowdData();
+            
+            Map<String, Object> response = new HashMap<>();
+            if (!allData.isEmpty()) {
+                CrowdData latest = allData.get(0); // Already sorted by entry time desc
+                response.put("success", true);
+                response.put("message", "Latest crowd data retrieved");
+                response.put("data", latest);
+                response.put("currentPeopleCount", latest.getTotalPeopleCount());
+                response.put("currentTemperature", latest.getTemperatureCelsius());
+            } else {
+                response.put("success", true);
+                response.put("message", "No crowd data available");
+                response.put("data", null);
+                response.put("currentPeopleCount", 0);
+                response.put("currentTemperature", null);
+            }
+            response.put("timestamp", LocalDateTime.now());
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "Error retrieving latest crowd data: " + e.getMessage());
+            errorResponse.put("timestamp", LocalDateTime.now());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    /**
+     * GET endpoint to get statistics summary
+     * Usage: GET /api/crowd-data/stats
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getCrowdDataStats() {
+        try {
+            List<CrowdData> allData = crowdDataService.getAllCrowdData();
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Statistics retrieved successfully");
+            response.put("totalRecords", allData.size());
+            
+            if (!allData.isEmpty()) {
+                // Calculate statistics
+                double avgPeopleCount = allData.stream()
+                    .mapToInt(CrowdData::getTotalPeopleCount)
+                    .average()
+                    .orElse(0);
+                
+                int maxPeopleCount = allData.stream()
+                    .mapToInt(CrowdData::getTotalPeopleCount)
+                    .max()
+                    .orElse(0);
+                
+                int minPeopleCount = allData.stream()
+                    .mapToInt(CrowdData::getTotalPeopleCount)
+                    .min()
+                    .orElse(0);
+                
+                double avgTemperature = allData.stream()
+                    .mapToDouble(CrowdData::getTemperatureCelsius)
+                    .average()
+                    .orElse(0);
+                
+                response.put("averagePeopleCount", Math.round(avgPeopleCount * 100.0) / 100.0);
+                response.put("maxPeopleCount", maxPeopleCount);
+                response.put("minPeopleCount", minPeopleCount);
+                response.put("averageTemperature", Math.round(avgTemperature * 100.0) / 100.0);
+                response.put("latestEntry", allData.get(0));
+            }
+            
+            response.put("timestamp", LocalDateTime.now());
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "Error retrieving statistics: " + e.getMessage());
+            errorResponse.put("timestamp", LocalDateTime.now());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }
