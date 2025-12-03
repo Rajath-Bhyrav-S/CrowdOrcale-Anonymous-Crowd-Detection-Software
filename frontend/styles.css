@@ -1,6 +1,4 @@
-/* Minimal Custom CSS for Scrollbars and specific overrides */
 
-/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
 }

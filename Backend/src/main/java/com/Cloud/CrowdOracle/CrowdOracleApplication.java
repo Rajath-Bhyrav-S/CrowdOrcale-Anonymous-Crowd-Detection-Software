@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.Cloud.CrowdOracle.repository")
-public class CrowdOracleApplication {
+public class CrowdOracleApplication 
+{
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		SpringApplication.run(CrowdOracleApplication.class, args);
 	}
 

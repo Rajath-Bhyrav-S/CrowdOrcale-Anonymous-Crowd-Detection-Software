@@ -1,9 +1,6 @@
-// CrowdOracle - Enterprise Intelligence Frontend
-// Uses TensorFlow.js with COCO-SSD model for person detection
 
 class CrowdOracle {
     constructor() {
-        // DOM Elements
         this.video = document.getElementById('webcam');
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -12,7 +9,6 @@ class CrowdOracle {
         this.loadingOverlay = document.getElementById('loadingOverlay');
         this.loadingText = document.getElementById('loadingText');
         
-        // Buttons
         this.startCameraBtn = document.getElementById('startCameraBtn');
         this.toggleCameraBtn = document.getElementById('toggleCameraBtn');
         this.toggleDetectionBtn = document.getElementById('toggleDetectionBtn');
@@ -23,8 +19,6 @@ class CrowdOracle {
         this.clearActivityBtn = document.getElementById('clearActivityBtn');
         this.tempUpBtn = document.getElementById('tempUp');
         this.tempDownBtn = document.getElementById('tempDown');
-        
-        // Stats Elements
         this.currentCountEl = document.getElementById('currentCount');
         this.maxCapacityDisplay = document.getElementById('maxCapacityDisplay');
         this.occupancyPercentEl = document.getElementById('occupancyPercent');
@@ -36,7 +30,6 @@ class CrowdOracle {
         this.connectionStatusText = document.getElementById('connectionStatusText');
         this.activityList = document.getElementById('activityList');
         
-        // Input Elements
         this.roomCapacityInput = document.getElementById('roomCapacity');
         this.modalRoomCapacity = document.getElementById('modalRoomCapacity');
         this.manualTempInput = document.getElementById('manualTemp');
@@ -127,7 +120,6 @@ class CrowdOracle {
         // Activity
         this.clearActivityBtn.addEventListener('click', () => this.clearActivity());
         
-        // Temperature Controls
         this.tempUpBtn.addEventListener('click', () => {
             let val = parseFloat(this.manualTempInput.value);
             val = Math.round((val + 0.1) * 10) / 10;
@@ -584,7 +576,6 @@ class CrowdOracle {
     }
 }
 
-// Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     window.crowdOracle = new CrowdOracle();
 });
